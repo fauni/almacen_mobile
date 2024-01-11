@@ -33,6 +33,8 @@ class AppTheme {
       primary: config.Colors().mainColor(1),
       secondary: config.Colors().secondaryColor(1),
       tertiary: config.Colors().accentColor(1),
+      inversePrimary: config.Colors().blueIconColor(1),
+      inverseSurface: config.Colors().greenIconColor(1),
     )
 
     

@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:app_almacen/controllers/login_controller.dart';
 import 'package:app_almacen/models/company.dart';
 import 'package:app_almacen/presentation/widgets/block_button_widget.dart';
-import 'package:app_almacen/services/company_service.dart';
 import 'package:app_almacen/services/user_service.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -48,7 +47,7 @@ class LoginScreenState extends StateMVC<LoginScreen> {
             child: Container(
               width: config.App(context).appWidth(100),
               height: config.App(context).appHeight(37),
-              decoration: BoxDecoration(color: Theme.of(context).colorScheme.tertiary),
+              decoration: BoxDecoration(color: Theme.of(context).colorScheme.primary),
             ),
           ),
           Positioned(

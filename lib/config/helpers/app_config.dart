@@ -50,9 +50,9 @@ class Colors {
   Color floatingActionButtonPrimaryColor(){
     try {
       // return Color(int.parse(settingRepo.setting.value.mainColor.replaceAll("#", "0xFF"))).withOpacity(opacity);
-      return const Color(0xFFFFA721);
+      return const Color(0xFFFE8900);
     } catch (e) {
-      return const Color(0xFFFFA721);
+      return const Color(0xFFFE8900);
     }
   }
   Color primaryColor(double opacity) {
@@ -66,27 +66,44 @@ class Colors {
   Color secondaryColor(double opacity) {
     try {
       // return Color(int.parse(settingRepo.setting.value.mainColor.replaceAll("#", "0xFF"))).withOpacity(opacity);
-      return const Color(0xFFA7B7BD).withOpacity(opacity);
+      return Color(0xFFFE8900).withOpacity(opacity);
     } catch (e) {
-      return const Color(0xFFA7B7BD).withOpacity(opacity);
+      return const Color(0xFFFE8900).withOpacity(opacity);
     }
   }
 
   Color accentColor(double opacity) {
     try {
       // return Color(int.parse(settingRepo.setting.value.mainColor.replaceAll("#", "0xFF"))).withOpacity(opacity);
-      return const Color(0xFF131523).withOpacity(opacity);
+      return const Color(0xFFA7B7BD).withOpacity(opacity);
     } catch (e) {
-      return const Color(0xFF131523).withOpacity(opacity);
+      return const Color(0xFFA7B7BD).withOpacity(opacity);
     }
   }
 
-   Color splashColor(double opacity) {
+  Color splashColor(double opacity) {
     try {
       // return Color(int.parse(settingRepo.setting.value.mainColor.replaceAll("#", "0xFF"))).withOpacity(opacity);
       return const Color(0xFF7E84A3).withOpacity(opacity);
     } catch (e) {
       return const Color(0xFF7E84A3).withOpacity(opacity);
-    }
+    } 
+  }
+  Color blueIconColor(double opacity) {
+    try {
+      // return Color(int.parse(settingRepo.setting.value.mainColor.replaceAll("#", "0xFF"))).withOpacity(opacity);
+      return const Color(0xFF57B8FF).withOpacity(opacity);
+    } catch (e) {
+      return const Color(0xFF57B8FF).withOpacity(opacity);
+    } 
+  }
+
+  Color greenIconColor(double opacity) {
+    try {
+      // return Color(int.parse(settingRepo.setting.value.mainColor.replaceAll("#", "0xFF"))).withOpacity(opacity);
+      return const Color(0xFF21D59B).withOpacity(opacity);
+    } catch (e) {
+      return const Color(0xFF21D59B).withOpacity(opacity);
+    } 
   }
 }

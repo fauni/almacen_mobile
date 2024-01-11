@@ -72,9 +72,9 @@ const appMenuItems = <MenuItem>[
     ),
 
     MenuItem(
-      title: 'Iniciar Sesión', 
+      title: 'Cerrar Sesión', 
       subTitle: 'Login', 
-      link: '/login', 
-      icon: Icons.login_outlined
+      link: '/', 
+      icon: Icons.logout_outlined
     ),
   ];

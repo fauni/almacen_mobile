@@ -1,164 +1,218 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:go_router/go_router.dart';
+import 'package:app_almacen/models/purchase_orders.dart';
+
 
 class DetalleRecepcionScreen extends StatefulWidget {
   const DetalleRecepcionScreen({super.key});
 
   @override
-  State<DetalleRecepcionScreen> createState() => _DetalleRecepcionScreenState();
+  State<DetalleRecepcionScreen> createState() => DetalleRecepcionScreenState();
 }
 
-class _DetalleRecepcionScreenState extends State<DetalleRecepcionScreen> {
-  TextEditingController dateInput = TextEditingController();
+class DetalleRecepcionScreenState extends State<DetalleRecepcionScreen> {
+  
 
   @override
   void initState() {
-    dateInput.text="";
+  
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    final PurchaseOrders order = GoRouterState.of(context).extra! as PurchaseOrders;
+    final size = MediaQuery.of(context).size;
     return Scaffold(
       appBar:  AppBar(
         title: const Text('Detalle de Recepción'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(10),
-        child: Column(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(15),
-              decoration: BoxDecoration(
-                color: const Color.fromRGBO(242, 242, 242, 1),
-                borderRadius: BorderRadius.circular(10.0)
-              ),
-              child: Column(
-                // mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  const Row(
-                    children: [
-                      Text('Cod. Documento: ', style: TextStyle(fontWeight: FontWeight.w300),),
-                      Text('4870', style: TextStyle(fontWeight: FontWeight.bold),)
-                    ],
-                  ),
-                  const Row(
-                    children: [
-                      Text('Proveedor: ', style: TextStyle(fontWeight: FontWeight.w300),),
-                      Text('ABC s.r.l.', style: TextStyle(fontWeight: FontWeight.bold),)
-                    ],
-                  ),
-                  
-                  const SizedBox(height: 15,),
-
-                  TextField(
-                    controller: dateInput,
-                    decoration: const InputDecoration(
-                      // icon: Icon(Icons.calendar_today),
-                      labelText: ("Fecha"),
-                      border: OutlineInputBorder(),
-                      suffixIcon: Icon(Icons.calendar_today)
+      body: Stack(
+        children: [
+          
+          SingleChildScrollView(
+            padding: EdgeInsets.only(bottom: 80),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 20, right: 20),
+                  child: ListTile(
+                    contentPadding: const EdgeInsets.symmetric(vertical: 0),
+                    leading: Icon(
+                      Icons.receipt,
+                      color: Theme.of(context).hintColor,
                     ),
-                    readOnly: true,
-                    onTap: () async {
-                      DateTime? pickedDate = await showDatePicker(
-                        context: context,
-                        initialDate: DateTime.now(),
-                        firstDate: DateTime(1950),
-                        lastDate: DateTime(2100)
-                      );
-
-                      if(pickedDate != null){
-                        String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
-                        print(formattedDate);
-
-                        setState(() {
-                          dateInput.text = formattedDate;
-                        });
-                      } else {}
-                    },
-                  ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  const TextField(
-                    decoration: InputDecoration(
-                      // icon: Icon(Icons.calendar_today),
-                      labelText: ("Buscar Productos"),
-                      border: OutlineInputBorder(),
-                      prefixIcon: Icon(Icons.search),
-                      suffixIcon: Icon(Icons.barcode_reader)
+                    title: Text(
+                      'Codigo Doc: ${order.docNum}',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.bodyLarge,
                     ),
-                  )
-                ],
-              ),
-            ),
-            Expanded(
-              child: ListView(
-                padding: EdgeInsets.all(15),
-                children: [
-                  Container(
-                    child: Row(
-                      children: [
-                        CircleAvatar(
-                          child: Text('1'),
+                    subtitle: Text(
+                      'Proveedor: ${order.cardName}'
+                    ),
+                  ),
+                ),
+            
+                const SizedBox(height: 15,),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Form(
+                    child: TextFormField(
+                      decoration: InputDecoration(
+                        hintText: 'Buscar Item',
+                        prefixIcon: const Icon(Icons.search),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Theme.of(context).focusColor.withOpacity(0.2)
+                          )
                         ),
-                        SizedBox(width: 15),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                Text('Codigo Item:', style: TextStyle(fontWeight: FontWeight.w300),),
-                                SizedBox(width: 10,),
-                                Text('MP00013', style: TextStyle(fontWeight: FontWeight.bold),),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Text('Nombre:',style: TextStyle(fontWeight: FontWeight.w300),),
-                                SizedBox(width: 10,),
-                                Text('Producto 123',style: TextStyle(fontWeight: FontWeight.bold),),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Text('Cantidad Pendiente:',style: TextStyle(fontWeight: FontWeight.w300),),
-                                SizedBox(width: 10,),
-                                Text('10 unidades',style: TextStyle(fontWeight: FontWeight.bold),),
-                              ],
-                            ),
-                          ],
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Theme.of(context).focusColor.withOpacity(0.5))
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Theme.of(context).focusColor.withOpacity(0.2))
                         )
-                      ],
-                    ),
+                      ),
+                    )
+                  )
+                ),
+                const SizedBox(height: 15,),
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      ElevatedButton.icon(
+                        onPressed: (){}, 
+                        icon: const Icon(Icons.qr_code_scanner),
+                        label: const Text('ESCANEAR QR'),
+                      ),
+                      ElevatedButton.icon(
+                        onPressed: (){}, 
+                        icon: const Icon(Icons.barcode_reader),
+                        label: const Text('ESCANEAR CB'),
+                      ),
+                    ],
                   ),
-                  Divider()
+                  const SizedBox(height: 15,),
+                ListView.separated(
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  primary: false,
+                  itemBuilder: (context, index) {
+                    DocumentLine line = order.documentLines!.elementAt(index);
+                    int numline = line.lineNum! + 1;
+                    return InkWell(
+                      onTap: (){
+                        // context.push('/detalle_recepcion', extra: order);
+                        // print('Redirigir');
+                      },
+                      child: Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 20),
+                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).cardColor.withOpacity(0.9),
+                          border: Border.all(
+                            color: Theme.of(context).colorScheme.tertiary,
+                            width: 2.0
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Theme.of(context).focusColor.withOpacity(0.1), blurRadius: 5, offset: const Offset(0, 2)
+                            )
+                          ],
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Stack(
+                                alignment: AlignmentDirectional.center,
+                                children: <Widget>[
+                                  Container(
+                                    height: 40,
+                                    width: 40,
+                                    decoration: BoxDecoration(
+                                      borderRadius: const BorderRadius.all(Radius.circular(40)),
+                                      border: Border.all(
+                                        color: Theme.of(context).colorScheme.inversePrimary,
+                                        width: 2.0
+                                      ),
+                                    ),
+                                    child: Center(
+                                      child: Text((numline).toString(), style: TextStyle(color: Theme.of(context).primaryColor),),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(width: 15,),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Codigo Item: ${line.itemCode}',
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                    ),
+                                    Text(
+                                      'Nombre: ${line.itemDescription}',
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 2,
+                                    ),
+                                    Text(
+                                      'Cant. Pendiente: ${line.quantity} ${line.measureUnit}',
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 2,
+                                    ),
+                                    Text(
+                                      'Almacen: ${line.itemDescription}',
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 2,
+                                    ),
+                                    
+                                  ],
+                                ),
+                              )
+                          ]
+                        ),
+                      )
+                    );
+                  }, 
+                  separatorBuilder: (context, index) {
+                    return const SizedBox(height: 10,);
+                  }, 
+                  itemCount: order.documentLines!.length
+                )
+              ],
+            ),
+          ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              color: Theme.of(context).focusColor,
+              height: 70,
+              width: size.width,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  ElevatedButton.icon(
+                    onPressed: (){}, 
+                    icon: const Icon(Icons.attach_file),
+                    label: const Text('ADJUNTAR'),
+                  ),
+                  ElevatedButton.icon(
+                    onPressed: (){}, 
+                    icon: const Icon(Icons.create),
+                    label: const Text('CREAR'),
+                  ),
                 ],
               ),
             )
-          ],
-        ),
-      ),
-      bottomNavigationBar: BottomAppBar(
-        // color: Colors.blue,
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            ElevatedButton.icon(
-              onPressed: () {}, 
-              icon: Icon(Icons.upload_file),
-              label: Text('Adjunto'),
-            ),
-            ElevatedButton.icon(
-              onPressed: () {}, 
-              icon: Icon(Icons.save),
-              label: Text('Crear'),
-            ),
-          ],
-        ),
-      ),
+          ),
+        ],
+      )
     );
   }
 }

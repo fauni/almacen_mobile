@@ -8,4 +8,10 @@ abstract class UserRepository {
   Future<User> login(Login user);
 
   void setCurrentUser(String jsonString);
+  
+  Future<User> getCurrentUser();
+
+  Future<String> getApiToken();
+  
+  Future<void> logout();
 }
