@@ -35,9 +35,19 @@ class AppTheme {
       tertiary: config.Colors().accentColor(1),
       inversePrimary: config.Colors().blueIconColor(1),
       inverseSurface: config.Colors().greenIconColor(1),
-    )
+    ),
+    textTheme: TextTheme(
+      titleSmall: TextStyle(color: config.Colors().accentColor(1), fontWeight: FontWeight.bold, fontSize: 14),
+      titleMedium: TextStyle(color: config.Colors().accentColor(1), fontWeight: FontWeight.bold, fontSize: 16),
+      titleLarge: TextStyle(color: config.Colors().accentColor(1), fontWeight: FontWeight.bold, fontSize: 22),
+    ),
 
-    
+    inputDecorationTheme: const InputDecorationTheme(
+      hintStyle: TextStyle(
+        color: Colors.grey,
+        fontSize: 16
+      )
+    )
   );
 
 }

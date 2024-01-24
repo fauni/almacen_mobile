@@ -2,6 +2,7 @@ import 'package:app_almacen/controllers/home_controller.dart';
 import 'package:app_almacen/presentation/widgets/block_button_options_widget.dart';
 import 'package:app_almacen/presentation/widgets/button_action_appbar_widget.dart';
 import 'package:app_almacen/presentation/widgets/side_menu.dart';
+import 'package:app_almacen/services/purchase_order_service.dart';
 import 'package:app_almacen/services/user_service.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -17,7 +18,7 @@ class HomeScreen extends StatefulWidget {
 class HomeScreenState extends StateMVC<HomeScreen> {
   late HomeController _con;
 
-  HomeScreenState(): super(HomeController(userRepository: UserService())){
+  HomeScreenState(): super(HomeController(purchaseOrderRepository: PurchaseOrderService() , userRepository: UserService())){
     _con = controller as HomeController;
   }
 
@@ -82,7 +83,8 @@ class HomeScreenState extends StateMVC<HomeScreen> {
                 },
                 borderColor: Theme.of(context).colorScheme.primary,
                 title: 'Ordenes de compra \n abiertas',
-                data: '18',
+                data: _con.ordenesPendientes.length.toString(),
+                loading: _con.loadingOrdenesPendientes,
               ),
               // SizedBox(width: 10,),
               WsInfoCard(
@@ -108,9 +110,10 @@ class WsInfoCard extends StatelessWidget {
   final Color borderColor;
   final String title;
   final String data;
+  bool loading;
   final Function() onPressed;
   
-  WsInfoCard({required this.borderColor, required this.title, required this.data, required this.onPressed, super.key});
+  WsInfoCard({required this.borderColor, required this.title, required this.data, this.loading = false, required this.onPressed, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -152,7 +155,9 @@ class WsInfoCard extends StatelessWidget {
                   title,
                   style: const TextStyle(fontWeight: FontWeight.normal),
                 ),
-                Container(
+                loading 
+                ? CircularProgressIndicator(color: Theme.of(context).colorScheme.inversePrimary,)
+                : Container(
                   margin: const EdgeInsets.symmetric(horizontal: 30),
                   padding: const EdgeInsets.symmetric(vertical: 3),
                   width: MediaQuery.of(context).size.width,

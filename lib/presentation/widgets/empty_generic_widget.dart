@@ -19,7 +19,7 @@ class EmptyGenericWidgetState extends State<EmptyGenericWidget> {
 
   @override
   void initState() {
-    Timer(const Duration(seconds: 5), (){
+    Timer(const Duration(seconds: 10), (){
       if(mounted){
         setState(() {
           loading = false;

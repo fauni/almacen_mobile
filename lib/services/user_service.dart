@@ -32,6 +32,7 @@ class UserService implements UserRepository{
   Future<User> login(Login data) async{
     try{
       var url = Uri.parse('${Environment.UrlApi}/User/Login');
+      print(url);
       var response = await http.post(
         url, 
         headers: {

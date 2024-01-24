@@ -77,7 +77,9 @@ class LoginController extends ControllerMVC{
       }
     }).catchError((e){
       loader!.remove();
-    }).whenComplete(() => Helper.hideLoader(loader!));
+    }).whenComplete(() {
+      Helper.hideLoader(loader!);
+    });
     // stream.listen((data) {
     //   if(data != null && data.apiToken != null){
     //     state!.context.push('/home');

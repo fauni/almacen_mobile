@@ -47,7 +47,7 @@ class LoginScreenState extends StateMVC<LoginScreen> {
             child: Container(
               width: config.App(context).appWidth(100),
               height: config.App(context).appHeight(37),
-              decoration: BoxDecoration(color: Theme.of(context).colorScheme.primary),
+              decoration: BoxDecoration(color: Theme.of(context).colorScheme.onSecondary),
             ),
           ),
           Positioned(

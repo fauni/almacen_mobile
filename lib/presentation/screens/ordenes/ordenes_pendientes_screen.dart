@@ -35,7 +35,7 @@ class OrdenesPendientesScreenState extends StateMVC<OrdenesPendientesScreen> {
         elevation: 0,
         centerTitle: true,
         title: const Text(
-          'Recepcion(Compras)',
+          'Pedidos Abiertos',
         ),
         actions: [
           Container(
@@ -109,7 +109,7 @@ class OrdenesPendientesScreenState extends StateMVC<OrdenesPendientesScreen> {
 
                   return InkWell(
                     onTap: (){
-                      context.push('/detalle_recepcion', extra: order);
+                      context.push('/detalle_orden', extra: order);
                       // print('Redirigir');
                     },
                     child: Container(

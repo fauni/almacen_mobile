@@ -52,15 +52,15 @@ class DocumentLine {
     final int? lineNum;
     final String? itemCode;
     final String? itemDescription;
-    final int? quantity;
-    final int? price;
+    final double? quantity;
+    final double? price;
     final double? priceAfterVat;
     final String? currency;
-    final int? rate;
-    final int? discountPercent;
+    final double? rate;
+    final double? discountPercent;
     final String? warehouseCode;
-    final int? salesPersonCode;
-    final int? commisionPercent;
+    final double? salesPersonCode;
+    final double? commisionPercent;
     final String? treeType;
     final String? accountCode;
     final String? useBaseUnits;
@@ -68,11 +68,13 @@ class DocumentLine {
     final String? vatGroup;
     final String? taxCode;
     final String? measureUnit;
-    final int? unitsOfMeasurment;
-    final int? unitPrice;
+    final double? unitsOfMeasurment;
+    final double? unitPrice;
+    final double? inventoryQuantity;
+    final double? remainingOpenQuantity;
+    final double? remainingOpenInventoryQuantity;
     final String? lineStatus;
     final int? docEntry;
-    final int? inventoryQuantity;
     final int? incoterms;
     final int? transportMode;
     final String? itemType;
@@ -99,9 +101,11 @@ class DocumentLine {
         this.measureUnit,
         this.unitsOfMeasurment,
         this.unitPrice,
+        this.inventoryQuantity,
+        this.remainingOpenQuantity,
+        this.remainingOpenInventoryQuantity,
         this.lineStatus,
         this.docEntry,
-        this.inventoryQuantity,
         this.incoterms,
         this.transportMode,
         this.itemType,
@@ -111,15 +115,15 @@ class DocumentLine {
         lineNum: json["lineNum"],
         itemCode: json["itemCode"],
         itemDescription: json["itemDescription"],
-        quantity: json["quantity"],
-        price: json["price"],
+        quantity: json["quantity"]?.toDouble(),
+        price: json["price"]?.toDouble(),
         priceAfterVat: json["priceAfterVat"]?.toDouble(),
         currency: json["currency"],
-        rate: json["rate"],
-        discountPercent: json["discountPercent"],
+        rate: json["rate"]?.toDouble(),
+        discountPercent: json["discountPercent"]?.toDouble(),
         warehouseCode: json["warehouseCode"],
-        salesPersonCode: json["salesPersonCode"],
-        commisionPercent: json["commisionPercent"],
+        salesPersonCode: json["salesPersonCode"]?.toDouble(),
+        commisionPercent: json["commisionPercent"]?.toDouble(),
         treeType: json["treeType"],
         accountCode: json["accountCode"],
         useBaseUnits: json["useBaseUnits"],
@@ -127,11 +131,13 @@ class DocumentLine {
         vatGroup: json["vatGroup"],
         taxCode: json["taxCode"],
         measureUnit: json["measureUnit"],
-        unitsOfMeasurment: json["unitsOfMeasurment"],
-        unitPrice: json["unitPrice"],
+        unitsOfMeasurment: json["unitsOfMeasurment"]?.toDouble(),
+        unitPrice: json["unitPrice"]?.toDouble(),
+        inventoryQuantity: json["inventoryQuantity"]?.toDouble(),
+        remainingOpenQuantity: json["remainingOpenQuantity"]?.toDouble(),
+        remainingOpenInventoryQuantity: json["remainingOpenInventoryQuantity"]?.toDouble(),
         lineStatus: json["lineStatus"],
         docEntry: json["docEntry"],
-        inventoryQuantity: json["inventoryQuantity"],
         incoterms: json["incoterms"],
         transportMode: json["transportMode"],
         itemType: json["itemType"],
@@ -159,9 +165,11 @@ class DocumentLine {
         "measureUnit": measureUnit,
         "unitsOfMeasurment": unitsOfMeasurment,
         "unitPrice": unitPrice,
+        "inventoryQuantity": inventoryQuantity,
+        "remainingOpenQuantity": remainingOpenQuantity,
+        "remainingOpenInventoryQuantity": remainingOpenInventoryQuantity,
         "lineStatus": lineStatus,
         "docEntry": docEntry,
-        "inventoryQuantity": inventoryQuantity,
         "incoterms": incoterms,
         "transportMode": transportMode,
         "itemType": itemType,
