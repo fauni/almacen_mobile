@@ -31,77 +31,87 @@ class HomeScreenState extends StateMVC<HomeScreen> {
   Widget build(BuildContext context) {
     final scaffoldKey = GlobalKey<ScaffoldState>();
 
-    return Scaffold(
-      key: scaffoldKey,
-      drawer: SideMenu(scaffoldKey: scaffoldKey,),
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        centerTitle: true,
-        title: const Text('Almacen Facil'),
-        actions: <Widget>[
-          ButtonActionAppbarWidget(iconColor: Theme.of(context).hintColor, labelColor: Theme.of(context).colorScheme.inversePrimary,)
-        ],
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (didPop) {
+        if(didPop){
+          return;
+        }
+        print(didPop);
+        print('No se puede nose puede ');
+      },
+      child: Scaffold(
+        key: scaffoldKey,
+        drawer: SideMenu(scaffoldKey: scaffoldKey,),
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          centerTitle: true,
+          title: const Text('Almacen Facil'),
+          actions: <Widget>[
+            ButtonActionAppbarWidget(iconColor: Theme.of(context).hintColor, labelColor: Theme.of(context).colorScheme.inversePrimary,)
+          ],
+        ),
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Container(
+              margin: const EdgeInsets.all(10),
+              child: const Image(
+                height: 70,
+                image: AssetImage('assets/images/logo-almacen-facil.png')
+              )
+            ),
+            Row(
+              children: [
+                WsInfoCard(
+                  onPressed: () {
+                    context.push('/recepcion_uno');
+                  },
+                  borderColor: Theme.of(context).colorScheme.inversePrimary,
+                  title: 'Pedidos a entregar hoy',
+                  data: '12/22',
+                ),
+                // SizedBox(width: 10,),
+                WsInfoCard(
+                  onPressed: () {
+                    
+                  },
+                  borderColor: Theme.of(context).colorScheme.tertiary,
+                  title: 'Pedidos Abiertos',
+                  data: '35',
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                WsInfoCard(
+                  onPressed: () {
+                    context.push('/ordenes_abiertas');
+                  },
+                  borderColor: Theme.of(context).colorScheme.primary,
+                  title: 'Ordenes de compra \n abiertas',
+                  data: _con.ordenesPendientes.length.toString(),
+                  loading: _con.loadingOrdenesPendientes,
+                ),
+                // SizedBox(width: 10,),
+                WsInfoCard(
+                  onPressed: () {
+                    context.push('/recepcion_compras');
+                  },
+                  borderColor: Theme.of(context).colorScheme.inverseSurface,
+                  title: 'Pendientes de \n aprobación',
+                  data: '4',
+                ),
+              ],
+            ),
+            const BlockButtonOptionsWidget()
+          ],
+      
+        ),
+        // bottomNavigationBar: BottomNavigationBarWmsWidget(),
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Container(
-            margin: const EdgeInsets.all(10),
-            child: const Image(
-              height: 70,
-              image: AssetImage('assets/images/logo-almacen-facil.png')
-            )
-          ),
-          Row(
-            children: [
-              WsInfoCard(
-                onPressed: () {
-                  context.push('/recepcion_uno');
-                },
-                borderColor: Theme.of(context).colorScheme.inversePrimary,
-                title: 'Pedidos a entregar hoy',
-                data: '12/22',
-              ),
-              // SizedBox(width: 10,),
-              WsInfoCard(
-                onPressed: () {
-                  
-                },
-                borderColor: Theme.of(context).colorScheme.tertiary,
-                title: 'Pedidos Abiertos',
-                data: '35',
-              ),
-            ],
-          ),
-          Row(
-            children: [
-              WsInfoCard(
-                onPressed: () {
-                  context.push('/ordenes_abiertas');
-                },
-                borderColor: Theme.of(context).colorScheme.primary,
-                title: 'Ordenes de compra \n abiertas',
-                data: _con.ordenesPendientes.length.toString(),
-                loading: _con.loadingOrdenesPendientes,
-              ),
-              // SizedBox(width: 10,),
-              WsInfoCard(
-                onPressed: () {
-                  context.push('/recepcion_compras');
-                },
-                borderColor: Theme.of(context).colorScheme.inverseSurface,
-                title: 'Pendientes de \n aprobación',
-                data: '4',
-              ),
-            ],
-          ),
-          const BlockButtonOptionsWidget()
-        ],
-
-      ),
-      // bottomNavigationBar: BottomNavigationBarWmsWidget(),
     );
   }
 }

@@ -30,13 +30,6 @@ class WarehouseController extends ControllerMVC{
 
    WarehouseController({ required WarehouseRepository warehouseRepository, required UserRepository userRepository }): _warehouseRepository = warehouseRepository,_userRepository=userRepository, scaffoldKey = GlobalKey<ScaffoldState>();
 
-
-  @override
-  void initState() {
-    super.initState();
-    // cargarWarehouses();
-  }
-
   void listenForUser(String codigo){
     _userRepository.getCurrentUser().then((value){
       if(value.apiToken == null){
@@ -62,14 +55,13 @@ class WarehouseController extends ControllerMVC{
       }
       
     }, onError: (a){
-      print(a);
+      
     }, onDone: (){
       setState(() { 
         loading = false;
       });
       if(warehouses.isEmpty){
-        print('=================================');
-        print('No se pudo traer información de almacenes');
+        
       }
       
     });
@@ -86,8 +78,6 @@ class WarehouseController extends ControllerMVC{
         // GoRouter.of(context).pop(_con.selectedWarehouse);
       });
     });
-
-    print(jsonEncode(warehouses.first));
   }
   
 }

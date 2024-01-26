@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:app_almacen/controllers/recepcion_controller.dart';
 import 'package:app_almacen/models/purchase_delivery_notes.dart';
 import 'package:app_almacen/models/warehouse.dart';
+import 'package:app_almacen/services/purchase_delivery_notes_service.dart';
 import 'package:app_almacen/services/purchase_order_service.dart';
 import 'package:app_almacen/services/user_service.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +21,7 @@ class DetalleItemRecepcionScreen extends StatefulWidget {
 
 class DetalleItemRecepcionScreenState extends StateMVC<DetalleItemRecepcionScreen> {
   late RecepcionController _con;
-  DetalleItemRecepcionScreenState(): super(RecepcionController(userRepository: UserService(), purchaseOrderRepository: PurchaseOrderService())){
+  DetalleItemRecepcionScreenState(): super(RecepcionController(userRepository: UserService(), purchaseOrderRepository: PurchaseOrderService(), purchaseDeliveryNotesRepository: PurchaseDeliveryNotesService())){
     _con = controller as RecepcionController;
   }
 
@@ -359,7 +360,8 @@ class DetalleItemRecepcionScreenState extends StateMVC<DetalleItemRecepcionScree
                 ),
                 MaterialButton(
                   onPressed: (){
-                    _con.loteNuevo.baseLineNumber = widget.item!.baseLine;
+                    // _con.loteNuevo.baseLineNumber = widget.item!.baseLine;  // esto era la linea anterior
+                    _con.loteNuevo.baseLineNumber = widget.item!.lineNum;
                     _con.loteNuevo.itemCode = widget.item!.itemCode;
                     
                     _con.agregarLote(context);

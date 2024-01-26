@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:app_almacen/controllers/recepcion_controller.dart';
 import 'package:app_almacen/models/purchase_delivery_notes.dart';
+import 'package:app_almacen/services/purchase_delivery_notes_service.dart';
 import 'package:app_almacen/services/purchase_order_service.dart';
 import 'package:app_almacen/services/user_service.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +24,7 @@ class DetalleRecepcionScreen extends StatefulWidget {
 class DetalleRecepcionScreenState extends StateMVC<DetalleRecepcionScreen> {
   late RecepcionController _con;
 
-  DetalleRecepcionScreenState(): super(RecepcionController(userRepository: UserService(), purchaseOrderRepository: PurchaseOrderService())){
+  DetalleRecepcionScreenState(): super(RecepcionController(userRepository: UserService(), purchaseOrderRepository: PurchaseOrderService(), purchaseDeliveryNotesRepository: PurchaseDeliveryNotesService())){
     _con = controller as RecepcionController;
     // _con.orden = widget.orden!;
   }
@@ -348,12 +349,32 @@ class DetalleRecepcionScreenState extends StateMVC<DetalleRecepcionScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   ElevatedButton.icon(
-                    onPressed: (){}, 
+                    onPressed: (){
+                      ScaffoldMessenger.of(context).showMaterialBanner(
+                        MaterialBanner(
+                          content: const Text('Se agrego correctamente la entrada de mercancia'), 
+                          actions: [
+                            TextButton.icon(
+                              onPressed: () {
+                                ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
+                                context.replace('/home');        
+                              },
+                              icon: const Icon(Icons.check), 
+                              label: const Text('Volver al Inicio')
+                            )
+                          ]
+                        )
+                      );
+                    }, 
                     icon: const Icon(Icons.attach_file),
                     label: const Text('ADJUNTAR'),
                   ),
-                  ElevatedButton.icon(
-                    onPressed: (){}, 
+                  _con.loading 
+                  ? const LinearProgressIndicator()
+                  : ElevatedButton.icon(
+                    onPressed: (){
+                      _con.crearEntradaMercancia();
+                    }, 
                     icon: const Icon(Icons.create),
                     label: const Text('CREAR'),
                   ),

@@ -66,7 +66,7 @@ class Colors {
   Color secondaryColor(double opacity) {
     try {
       // return Color(int.parse(settingRepo.setting.value.mainColor.replaceAll("#", "0xFF"))).withOpacity(opacity);
-      return Color(0xFFFE8900).withOpacity(opacity);
+      return const Color(0xFFFE8900).withOpacity(opacity);
     } catch (e) {
       return const Color(0xFFFE8900).withOpacity(opacity);
     }

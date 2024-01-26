@@ -2,9 +2,11 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:app_almacen/models/error_response_sap.dart';
 import 'package:app_almacen/models/purchase_delivery_notes.dart';
 import 'package:app_almacen/models/purchase_orders.dart';
 import 'package:app_almacen/models/user.dart';
+import 'package:app_almacen/repository/purchase_delivery_notes_repository.dart';
 import 'package:app_almacen/repository/purchase_order_repository.dart';
 import 'package:app_almacen/repository/user_repository.dart';
 import 'package:flutter/material.dart';
@@ -14,9 +16,11 @@ import 'package:go_router/go_router.dart';
 class RecepcionController extends ControllerMVC{
   final UserRepository _userRepository;
   final PurchaseOrderRepository _purchaseOrderRepository;
+  final PurchaseDeliveryNotesRepository _purchaseDeliveryNotesRepository;
 
   PurchaseOrders orden = PurchaseOrders();
   PurchaseDeliveryNotes recepcion = PurchaseDeliveryNotes(documentLines: []);
+  PurchaseDeliveryNotes recepcionGuardado = PurchaseDeliveryNotes(documentLines: []);
   List<BatchNumber> lotes = [];
   BatchNumber loteNuevo = BatchNumber();
 
@@ -32,16 +36,23 @@ class RecepcionController extends ControllerMVC{
   final controllerCantidad = TextEditingController();
 
 
-  RecepcionController({ required UserRepository userRepository, required PurchaseOrderRepository purchaseOrderRepository })
-    : _userRepository = userRepository, _purchaseOrderRepository = purchaseOrderRepository, scaffoldKey = GlobalKey<ScaffoldState>(), batchNumberFormKey = GlobalKey<FormState>();
+  RecepcionController({ required UserRepository userRepository, required PurchaseOrderRepository purchaseOrderRepository, required PurchaseDeliveryNotesRepository purchaseDeliveryNotesRepository})
+    : _userRepository = userRepository, 
+      _purchaseOrderRepository = purchaseOrderRepository, 
+      _purchaseDeliveryNotesRepository = purchaseDeliveryNotesRepository,
+      scaffoldKey = GlobalKey<ScaffoldState>(), 
+      batchNumberFormKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     // orden = GoRouterState.of(state!.context).extra! as PurchaseOrders; // borrar
-    // cargarLotes();
+    cargarValoresIniciales();
     super.initState();
   }
 
+  void cargarValoresIniciales(){
+    recepcion.docEntry = '0';
+  }
   // void listenForUser(){
   //   _userRepository.getCurrentUser().then((value){
   //     if(value.apiToken == null){
@@ -54,6 +65,31 @@ class RecepcionController extends ControllerMVC{
   //     });
   //   });
   // }
+  void crearEntradaMercancia()async {
+    loading = true;
+    final stream = await _purchaseDeliveryNotesRepository.guardarEntradaMercancia(token, recepcion);
+    
+    stream.listen((data) {
+      ErrorResponseSap error = data.$2!;
+      if(error == null){
+        recepcionGuardado = data.$1!;
+      } else {
+        ScaffoldMessenger.of(state!.context).showSnackBar(
+          SnackBar(
+            content: Text('${error.message}'), 
+            duration: const Duration(seconds: 5), 
+            backgroundColor: Colors.red,
+          )
+        );
+      }
+      setState(() {});
+    }, onError: (Object error){   
+      state!.context.push('/');
+    }, onDone: (){
+      loading = false;
+    });
+  }
+
   void agregarLote(BuildContext context){
     setState(() { });
     if(batchNumberFormKey.currentState!.validate()){
