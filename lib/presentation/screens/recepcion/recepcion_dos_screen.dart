@@ -95,13 +95,13 @@ class RecepcionDosScreen extends StatelessWidget {
           children: [
             ElevatedButton.icon(
               onPressed: () {}, 
-              icon: Icon(Icons.barcode_reader),
-              label: Text('Scan'),
+              icon: const Icon(Icons.barcode_reader),
+              label: const Text('Scan'),
             ),
             ElevatedButton.icon(
               onPressed: () {}, 
-              icon: Icon(Icons.search),
-              label: Text('Buscar'),
+              icon: const Icon(Icons.search),
+              label: const Text('Buscar'),
             ),
           ],
         ),

@@ -7,8 +7,10 @@ import 'package:app_almacen/models/warehouse.dart';
 import 'package:app_almacen/services/purchase_delivery_notes_service.dart';
 import 'package:app_almacen/services/purchase_order_service.dart';
 import 'package:app_almacen/services/user_service.dart';
+import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 
 class DetalleItemRecepcionScreen extends StatefulWidget {
@@ -91,11 +93,13 @@ class DetalleItemRecepcionScreenState extends StateMVC<DetalleItemRecepcionScree
                           
                         ),
                       ),
-                      Text(
-                        '${widget.item!.itemDescription}',
-                        style: Theme.of(context).textTheme.bodySmall,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
+                      Expanded(
+                        child: Text(
+                          '${widget.item!.itemDescription}',
+                          style: Theme.of(context).textTheme.bodySmall,
+                          maxLines: 3,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
                     ],
                   ),
@@ -186,7 +190,7 @@ class DetalleItemRecepcionScreenState extends StateMVC<DetalleItemRecepcionScree
                               final result = await context.push('/lista_almacenes', extra: widget.item!);
                               setState(() {
                                 Warehouse resultWarehouse = Warehouse.fromJson(jsonDecode(jsonEncode(result)));
-                                widget.item!.warehouseCode = resultWarehouse.warehouseCode;
+                                widget.item!.warehouseCode = int.parse(resultWarehouse.warehouseCode);
                               });
                             }, 
                             icon: Icon(
@@ -345,6 +349,33 @@ class DetalleItemRecepcionScreenState extends StateMVC<DetalleItemRecepcionScree
                       hintText: 'Cantidad', labelText: 'Cantidad'
                     ),
                   ),
+                   TextField(
+                    controller: _con.dateInputFechaVencimiento,
+                    decoration: const InputDecoration(
+                        icon: Icon(Icons.calendar_today),
+                        labelText: "Fecha de Vencimiento"),
+                    readOnly: true,
+                    onTap: () async {
+                      DateTime? salidaDate = await showDatePicker(
+                        context: context,
+                        initialDate: DateTime.now(),
+                        firstDate:
+                            new DateTime.now().subtract(new Duration(days: 0)),
+                        lastDate: new DateTime.now().add(new Duration(days: 2000)),
+                      );
+
+                      if (salidaDate != null) {
+                        print(salidaDate);
+                        String fechaSalida = formatDate(salidaDate, [dd, '/', mm, '/', yyyy]);
+                        setState(() {
+                          _con.dateInputFechaVencimiento.text = fechaSalida;
+                          _con.loteNuevo.expiryDate = salidaDate;
+                        });
+                      } else {
+                        // print("Fecha de Salida no fue seleccionado");
+                      }
+                    },
+                  ),
                 ],
               ),
             ),
@@ -363,7 +394,6 @@ class DetalleItemRecepcionScreenState extends StateMVC<DetalleItemRecepcionScree
                     // _con.loteNuevo.baseLineNumber = widget.item!.baseLine;  // esto era la linea anterior
                     _con.loteNuevo.baseLineNumber = widget.item!.lineNum;
                     _con.loteNuevo.itemCode = widget.item!.itemCode;
-                    
                     _con.agregarLote(context);
                   },
                   child: Text(
@@ -378,6 +408,23 @@ class DetalleItemRecepcionScreenState extends StateMVC<DetalleItemRecepcionScree
         );  
       },
     );
+  }
+
+  Future<void> _selectExpiryDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+    );
+
+    if (picked != null && picked != _con.selectedDate) {
+      setState(() {
+        _con.selectedDate = picked;
+        _con.loteNuevo.expiryDate = _con.selectedDate;
+        print(_con.loteNuevo.expiryDate);
+      });
+    }
   }
 
   Future mostrarDialogCantidad(BuildContext context) {

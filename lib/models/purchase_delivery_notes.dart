@@ -9,7 +9,7 @@ PurchaseDeliveryNotes purchaseDeliveryNotesFromJson(String str) => PurchaseDeliv
 String purchaseDeliveryNotesToJson(PurchaseDeliveryNotes data) => json.encode(data.toJson());
 
 class PurchaseDeliveryNotes {
-    String? docEntry;
+    int? docEntry;
     String? cardCode;
     String? cardName;
     DateTime? docDate;
@@ -24,19 +24,19 @@ class PurchaseDeliveryNotes {
     });
 
     factory PurchaseDeliveryNotes.fromJson(Map<String, dynamic> json) => PurchaseDeliveryNotes(
-        docEntry: json["DocEntry"],
-        cardCode: json["CardCode"],
-        cardName: json["CardName"],
-        docDate: json["DocDate"] == null ? null : DateTime.parse(json["DocDate"]),
-        documentLines: json["DocumentLines"] == null ? [] : List<DocumentLineDeliveryNotes>.from(json["DocumentLines"]!.map((x) => DocumentLineDeliveryNotes.fromJson(x))),
+        docEntry: json["docEntry"],
+        cardCode: json["cardCode"],
+        cardName: json["cardName"],
+        docDate: json["docDate"] == null ? null : DateTime.parse(json["docDate"]),
+        documentLines: json["documentLines"] == null ? [] : List<DocumentLineDeliveryNotes>.from(json["documentLines"]!.map((x) => DocumentLineDeliveryNotes.fromJson(x))),
     );
 
     Map<String, dynamic> toJson() => {
-        "DocEntry": docEntry,
-        "CardCode": cardCode,
-        "CardName": cardName,
-        "DocDate": docDate?.toIso8601String(),
-        "DocumentLines": documentLines == null ? [] : List<dynamic>.from(documentLines.map((x) => x.toJson())),
+        "docEntry": docEntry,
+        "cardCode": cardCode,
+        "cardName": cardName,
+        "docDate": docDate?.toIso8601String(),
+        "documentLines": documentLines == null ? [] : List<dynamic>.from(documentLines.map((x) => x.toJson())),
     };
 }
 
@@ -48,7 +48,7 @@ class DocumentLineDeliveryNotes {
     String? currency;
     String? taxCode;
     double? unitPrice;
-    String? warehouseCode;
+    int? warehouseCode;
     int? baseType;
     int? baseEntry;
     int? baseLine;
@@ -70,33 +70,33 @@ class DocumentLineDeliveryNotes {
     });
 
     factory DocumentLineDeliveryNotes.fromJson(Map<String, dynamic> json) => DocumentLineDeliveryNotes(
-        lineNum: json["LineNum"],
-        itemCode: json["ItemCode"],
-        itemDescription: json["ItemDescription"],
-        quantity: json["Quantity"],
-        currency: json["Currency"],
-        taxCode: json["TaxCode"],
-        unitPrice: json["UnitPrice"],
-        warehouseCode: json["WarehouseCode"],
-        baseType: json["BaseType"],
-        baseEntry: json["BaseEntry"],
-        baseLine: json["BaseLine"],
-        batchNumbers: json["BatchNumbers"] == null ? [] : List<BatchNumber>.from(json["BatchNumbers"]!.map((x) => BatchNumber.fromJson(x))),
+        lineNum: json["lineNum"],
+        itemCode: json["itemCode"],
+        itemDescription: json["itemDescription"],
+        quantity: json["quantity"].toDouble(),
+        currency: json["currency"],
+        taxCode: json["taxCode"],
+        unitPrice: json["unitPrice"].toDouble(),
+        warehouseCode: json["warehouseCode"],
+        baseType: json["baseType"],
+        baseEntry: json["baseEntry"],
+        baseLine: json["baseLine"],
+        batchNumbers: json["batchNumbers"] == null ? [] : List<BatchNumber>.from(json["batchNumbers"]!.map((x) => BatchNumber.fromJson(x))),
     );
 
     Map<String, dynamic> toJson() => {
-        "LineNum": lineNum,
-        "ItemCode": itemCode,
-        "ItemDescription": itemDescription,
-        "Quantity": quantity,
-        "Currency": currency,
-        "TaxCode": taxCode,
-        "UnitPrice": unitPrice,
-        "WarehouseCode": warehouseCode,
-        "BaseType": baseType,
-        "BaseEntry": baseEntry,
-        "BaseLine": baseLine,
-        "BatchNumbers": batchNumbers == null ? [] : List<dynamic>.from(batchNumbers!.map((x) => x.toJson())),
+        "lineNum": lineNum,
+        "itemCode": itemCode,
+        "itemDescription": itemDescription,
+        "quantity": quantity,
+        "currency": currency,
+        "taxCode": taxCode,
+        "unitPrice": unitPrice,
+        "warehouseCode": warehouseCode,
+        "baseType": baseType,
+        "baseEntry": baseEntry,
+        "baseLine": baseLine,
+        "batchNumbers": batchNumbers == null ? [] : List<dynamic>.from(batchNumbers!.map((x) => x.toJson())),
     };
 }
 
@@ -105,25 +105,29 @@ class BatchNumber {
     String? batchNumber;
     double? quantity;
     String? itemCode;
+    DateTime? expiryDate;
 
     BatchNumber({
         this.baseLineNumber,
         this.batchNumber,
         this.quantity,
         this.itemCode,
+        this.expiryDate
     });
 
     factory BatchNumber.fromJson(Map<String, dynamic> json) => BatchNumber(
-        baseLineNumber: json["BaseLineNumber"],
-        batchNumber: json["BatchNumber"],
-        quantity: json["Quantity"],
-        itemCode: json["ItemCode"],
+        baseLineNumber: json["baseLineNumber"],
+        batchNumber: json["batchNumber"],
+        quantity: json["quantity"].toDouble(),
+        itemCode: json["itemCode"],
+        expiryDate: json["expiryDate"] == null ? null : DateTime.parse(json["expiryDate"]),
     );
 
     Map<String, dynamic> toJson() => {
-        "BaseLineNumber": baseLineNumber,
-        "BatchNumber": batchNumber,
-        "Quantity": quantity,
-        "ItemCode": itemCode,
+        "baseLineNumber": baseLineNumber,
+        "batchNumber": batchNumber,
+        "quantity": quantity,
+        "itemCode": itemCode,
+        "expiryDate": expiryDate?.toIso8601String(),
     };
 }

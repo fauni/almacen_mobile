@@ -6,6 +6,9 @@ import 'package:app_almacen/services/user_service.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:qrscan/qrscan.dart' as scanner;
+
 
 class OrdenesPendientesScreen extends StatefulWidget {
   const OrdenesPendientesScreen({super.key});
@@ -88,7 +91,21 @@ class OrdenesPendientesScreenState extends StateMVC<OrdenesPendientesScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   ElevatedButton.icon(
-                    onPressed: (){}, 
+                    onPressed: () async {
+                      await Permission.camera.request();
+                      String? cameraScanResult = await scanner.scan();
+                      if(cameraScanResult== null){
+
+                      } else {
+                        final result = cameraScanResult!.split('|');
+                        int id = int.parse(result[0]);
+                        PurchaseOrders order = _con.ordenes.firstWhere((element) => element.docEntry == id);
+                        context.push('/detalle_orden', extra: order);
+                      }
+
+                      print('============== scan qr ======================');
+                      print(cameraScanResult);
+                    }, 
                     icon: const Icon(Icons.qr_code_scanner),
                     label: const Text('ESCANEAR QR'),
                   ),

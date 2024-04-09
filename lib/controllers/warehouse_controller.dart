@@ -69,7 +69,7 @@ class WarehouseController extends ControllerMVC{
 
   verificarSeleccionWarehouse(){
     warehouses.forEach((w) {
-      if(w.warehouseCode == dataItem.warehouseCode){
+      if(int.parse(w.warehouseCode) == dataItem.warehouseCode){
         w.selected = true;
       } else {
         w.selected = false;

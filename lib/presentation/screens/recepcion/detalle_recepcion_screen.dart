@@ -1,5 +1,8 @@
 import 'dart:convert';
 
+import 'package:material_dialogs/material_dialogs.dart';
+
+
 import 'package:app_almacen/controllers/recepcion_controller.dart';
 import 'package:app_almacen/models/purchase_delivery_notes.dart';
 import 'package:app_almacen/services/purchase_delivery_notes_service.dart';
@@ -8,6 +11,7 @@ import 'package:app_almacen/services/user_service.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:app_almacen/models/purchase_orders.dart';
+import 'package:material_dialogs/widgets/buttons/icon_outline_button.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:intl/intl.dart';
 
@@ -310,18 +314,30 @@ class DetalleRecepcionScreenState extends StateMVC<DetalleRecepcionScreen> {
                                       ),
                                     ),
                                     const SizedBox(width: 10,),
-                                    IconButton(
-                                      onPressed: () async {
-                                        final result = await context.push('/detalle_item_recepcion', extra: line);
-                                        setState(() {
-                                          DocumentLineDeliveryNotes dataResult = DocumentLineDeliveryNotes.fromJson(jsonDecode(jsonEncode(result)));
-                                          line = dataResult;
-                                        });
-                                      }, 
-                                      icon: Icon(
-                                        Icons.edit,
-                                        color: Theme.of(context).primaryColor,
-                                      )
+                                    Column(
+                                      children: [
+                                        IconButton(
+                                          onPressed: () async {
+                                            final result = await context.push('/detalle_item_recepcion', extra: line);
+                                            setState(() {
+                                              DocumentLineDeliveryNotes dataResult = DocumentLineDeliveryNotes.fromJson(jsonDecode(jsonEncode(result)));
+                                              line = dataResult;
+                                            });
+                                          }, 
+                                          icon: Icon(
+                                            Icons.edit,
+                                            color: Theme.of(context).primaryColor,
+                                          )
+                                        ),
+                                        IconButton(
+                                          onPressed: (){
+                                            setState(() { 
+                                              _con.recepcion.documentLines.removeAt(index);
+                                            });
+                                          }, 
+                                          icon: const Icon(Icons.delete, color: Colors.red,)
+                                        )
+                                      ],
                                     )
                                   ],
                                 ),
@@ -350,30 +366,32 @@ class DetalleRecepcionScreenState extends StateMVC<DetalleRecepcionScreen> {
                 children: [
                   ElevatedButton.icon(
                     onPressed: (){
-                      ScaffoldMessenger.of(context).showMaterialBanner(
-                        MaterialBanner(
-                          content: const Text('Se agrego correctamente la entrada de mercancia'), 
-                          actions: [
-                            TextButton.icon(
-                              onPressed: () {
-                                ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
-                                context.replace('/home');        
-                              },
-                              icon: const Icon(Icons.check), 
-                              label: const Text('Volver al Inicio')
-                            )
-                          ]
-                        )
+                      Dialogs.materialDialog(
+                        context: context,
+                        msg: 'Se creo la entrada de Mercancia #32',
+                        title: 'Correcto',
+                        color: Colors.white,
+                        barrierDismissible: false,
+                        actions: [
+                          IconsOutlineButton(
+                            onPressed: (){
+                              Navigator.pop(context);
+                              context.replace('/home');        
+                            }, 
+                            text: 'Volver al Inicio',
+                            iconData: Icons.home,
+                          )
+                        ]
                       );
                     }, 
                     icon: const Icon(Icons.attach_file),
                     label: const Text('ADJUNTAR'),
                   ),
                   _con.loading 
-                  ? const LinearProgressIndicator()
+                  ? const CircularProgressIndicator()
                   : ElevatedButton.icon(
                     onPressed: (){
-                      _con.crearEntradaMercancia();
+                      _con.crearEntradaMercancia(context);
                     }, 
                     icon: const Icon(Icons.create),
                     label: const Text('CREAR'),

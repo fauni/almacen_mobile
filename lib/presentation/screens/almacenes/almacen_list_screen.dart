@@ -76,7 +76,7 @@ class AlmacenListScreenState extends StateMVC<AlmacenListScreen> {
                   onTap: (){
                     _con.selectedWarehouse = warehouse;
                     _con.warehouses.forEach((w) {
-                      if(w.warehouseCode == warehouse.warehouseCode){
+                      if(int.parse(w.warehouseCode) == int.parse(warehouse.warehouseCode)){
                         w.selected = true;
                       } else {
                         w.selected = false;

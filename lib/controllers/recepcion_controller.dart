@@ -2,6 +2,9 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:material_dialogs/material_dialogs.dart';
+
+
 import 'package:app_almacen/models/error_response_sap.dart';
 import 'package:app_almacen/models/purchase_delivery_notes.dart';
 import 'package:app_almacen/models/purchase_orders.dart';
@@ -10,6 +13,7 @@ import 'package:app_almacen/repository/purchase_delivery_notes_repository.dart';
 import 'package:app_almacen/repository/purchase_order_repository.dart';
 import 'package:app_almacen/repository/user_repository.dart';
 import 'package:flutter/material.dart';
+import 'package:material_dialogs/widgets/buttons/icon_outline_button.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:go_router/go_router.dart';
 
@@ -24,6 +28,8 @@ class RecepcionController extends ControllerMVC{
   List<BatchNumber> lotes = [];
   BatchNumber loteNuevo = BatchNumber();
 
+  DateTime? selectedDate;
+
   User user = User();
   String token = "0";
   GlobalKey<ScaffoldState> scaffoldKey;
@@ -34,6 +40,7 @@ class RecepcionController extends ControllerMVC{
   double cantidadMaxima = 0;
   String mensajeError = '';
   final controllerCantidad = TextEditingController();
+  TextEditingController dateInputFechaVencimiento = TextEditingController();
 
 
   RecepcionController({ required UserRepository userRepository, required PurchaseOrderRepository purchaseOrderRepository, required PurchaseDeliveryNotesRepository purchaseDeliveryNotesRepository})
@@ -51,7 +58,7 @@ class RecepcionController extends ControllerMVC{
   }
 
   void cargarValoresIniciales(){
-    recepcion.docEntry = '0';
+    recepcion.docEntry = 0;
   }
   // void listenForUser(){
   //   _userRepository.getCurrentUser().then((value){
@@ -65,15 +72,32 @@ class RecepcionController extends ControllerMVC{
   //     });
   //   });
   // }
-  void crearEntradaMercancia()async {
+  void crearEntradaMercancia(BuildContext context)async {
     loading = true;
     final stream = await _purchaseDeliveryNotesRepository.guardarEntradaMercancia(token, recepcion);
-    
     stream.listen((data) {
-      ErrorResponseSap error = data.$2!;
-      if(error == null){
+      // print(jsonEncode(data));
+      if(data.$2 == null){
         recepcionGuardado = data.$1!;
+        Dialogs.materialDialog(
+          context: context,
+          msg: 'Se creo la entrada de Mercancia #${recepcionGuardado.docEntry}',
+          title: 'Correcto',
+          color: Colors.white,
+          barrierDismissible: false,
+          actions: [
+            IconsOutlineButton(
+              onPressed: (){
+                Navigator.pop(context);
+                context.replace('/home');        
+              }, 
+              text: 'Volver al Inicio',
+              iconData: Icons.home,
+            )
+          ]
+        );
       } else {
+        ErrorResponseSap error = data.$2!;
         ScaffoldMessenger.of(state!.context).showSnackBar(
           SnackBar(
             content: Text('${error.message}'), 
@@ -163,7 +187,7 @@ class RecepcionController extends ControllerMVC{
         lines.currency = element.currency;
         lines.taxCode = element.taxCode;
         lines.unitPrice = element.unitPrice;
-        lines.warehouseCode = element.warehouseCode;
+        lines.warehouseCode = int.parse(element.warehouseCode!);
         lines.baseType = 22;
         lines.baseEntry = orden.docEntry;
         lines.baseLine = element.lineNum;

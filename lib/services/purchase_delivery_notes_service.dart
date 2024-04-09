@@ -26,7 +26,9 @@ class PurchaseDeliveryNotesService implements PurchaseDeliveryNotesRepository{
       String cuerpo = jsonEncode(data);
       print(cuerpo);
       if(response.statusCode == 200){
-        final jsonData = jsonDecode(response.body);
+        final jsonData = jsonDecode(response.body) as Map<String, dynamic>;
+        print('=================== datos respuesta =============');
+        print(jsonData);
         PurchaseDeliveryNotes purchaseDeliveryNotes = PurchaseDeliveryNotes.fromJson(jsonData);
         return Stream.value((purchaseDeliveryNotes, null));
       } else if (response.statusCode == 401 ){
